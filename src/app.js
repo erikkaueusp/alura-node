@@ -1,14 +1,23 @@
 import express from "express";
+import db from "./config/dbConnect.js";
+import livros from "./models/Livro.js"
+
+
+db.on("error",console.log.bind(console,'Erro de conexão'))
+
+db.once("open",() => {
+    console.log('conexão com o banco feita com sucesso.')
+})
 
 
 const app = express();
 
 app.use(express.json()) // recurso pra interpretar json nas requisições
 
-const livros = [
-    {id:1, "titulo": "Senhor dos aneis"},
-    {id:2, "titulo": "O hobbit"}
-]
+// const livros = [
+//     {id:1, "titulo": "Senhor dos aneis"},
+//     {id:2, "titulo": "O hobbit"}
+// ]
 
 // criado dois métodos GET
 
@@ -17,7 +26,7 @@ app.get('/', (req,res) => {
 })
 
 app.get('/livros', (req,res) => {
-    res.status(200).json(livros)
+    livros.find((err, livros) =>  res.status(200).json(livros) )
 })
 
 app.get('/livros/:id', (req,res) => {
