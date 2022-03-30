@@ -20,10 +20,9 @@ app.get('/livros', (req,res) => {
     res.status(200).json(livros)
 })
 
-app.put('/livros/:id', (req,res) => {
+app.get('/livros/:id', (req,res) => {
     let index = buscaLivro(req.params.id);
     res.json(livros[index]);
-    res.send('Livro cadastrado com sucesso');
 })
 
 app.post('/livros', (req,res) => {
@@ -35,8 +34,17 @@ app.put('/livros/:id', (req,res) => {
     let index = buscaLivro(req.params.id);
     livros[index].titulo = req.body.titulo;
     res.json(livros);
-    res.send('Livro cadastrado com sucesso');
+    res.send('Livro atualizado com sucesso');
 })
+
+app.delete('/livros/:id', (req,res) => {
+    let {id} = req.params; // aqui foi feita uma atribuição via desestruturação.
+    let index = buscaLivro(id);
+    livros.splice(index,1) // index até 1 ou seja não será uma sequencia de exclusão.
+    res.json(livros);
+    res.send(`Livro ${id} excluido`);
+})
+
 
 function buscaLivro(id) {
     return livros.findIndex(livro => livro.id == id);
